@@ -30,8 +30,8 @@ func init() {
 		root: rootCmd,
 		impl: RemoveCommand,
 	})
-	RegisterReportCommand(rootCmd)
-	RegisterUpdateCommand(rootCmd)
+	// RegisterReportCommand(rootCmd)
+	// RegisterUpdateCommand(rootCmd)
 }
 
 func Execute() {

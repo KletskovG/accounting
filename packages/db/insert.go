@@ -24,5 +24,5 @@ func InsertTransaction(
 
 	log.Default().Println("inserting: ", transaction)
 
-	return Collection.InsertOne(context.TODO(), transaction)
+	return Collection.InsertOne(context.Background(), transaction)
 }

@@ -9,7 +9,7 @@ import (
 )
 
 func Migrate() {
-	var result, err = Collection.UpdateMany(context.TODO(), bson.D{}, bson.D{
+	var result, err = Collection.UpdateMany(context.Background(), bson.D{}, bson.D{
 		{"$currentDate", bson.D{{"timestamp", bson.D{{"$type", "date"}}}}},
 	})
 

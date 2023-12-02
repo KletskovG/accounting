@@ -2,33 +2,35 @@ package db
 
 import (
 	"context"
-	"log"
 
+	"github.com/kletskovg/accounting/packages/logger"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// TODO: Work with limit
-func ListTransations(limit int) {
-	var opts = options.Find().SetLimit(int64(limit))
-	var cursor, err = Collection.Find(context.Background(), bson.D{}, opts)
+func ListTransations(limit int) []primitive.D {
+	var opts = options.Find()
+	opts.SetLimit(int64(limit))
+	opts.SetSort(bson.D{{"timestamp", 1}})
+
+	var cursor, err = Collection.Find(
+		context.Background(),
+		bson.D{},
+		opts,
+	)
 
 	if err != nil {
+		logger.Error("Cant retrieve transactions from DB \n")
 	}
-
-	// var transactions = make(map[string]bson.M)
 
 	defer cursor.Close(context.Background())
 
-	var transactions []Transaction
+	var transactions []bson.D
 
 	if err = cursor.All(context.Background(), &transactions); err != nil {
-		log.Default().Println("Cant read transactions from DB: ", err)
+		logger.Error("Cant process transactions from DB: \n", err)
 	}
 
-	log.Default().Println(len(transactions), " results")
-	for _, result := range transactions {
-		// log.Default().Println(result.Timestamp.T)
-		log.Default().Println(result)
-	}
+	return transactions
 }

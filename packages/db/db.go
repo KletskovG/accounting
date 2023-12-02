@@ -12,7 +12,7 @@ import (
 var Collection = new(mongo.Collection)
 
 type Transaction struct {
-	ID        string `bson:"_id" json:"_id"`
+	ID        string `bson:"_id,omitempty" json:"id,omitempty"`
 	Date      string `bson:"date" json:"date"`
 	Expense   int32  `bson:"expense" json:"expense"`
 	Category  string `bson:"category" json:"category"`
@@ -23,7 +23,7 @@ type Transaction struct {
 func init() {
 	var uri = config.GetEnvVariable(config.MONGODB_URL)
 
-	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(uri))
 
 	if err != nil {
 		log.Fatal("Cant connect to database")

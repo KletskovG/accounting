@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/kletskovg/accounting/packages/db"
+	"github.com/kletskovg/accounting/packages/logger"
 	"github.com/spf13/cobra"
 )
 
@@ -16,5 +17,11 @@ func ListCommand(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	db.ListTransations(limit)
+	var transactions = db.ListTransations(limit)
+	logger.Info(len(transactions), " results")
+	for _, result := range transactions {
+		logger.Info(result)
+	}
+
+	// TODO: Implement indentation and logging of transactions with ID
 }

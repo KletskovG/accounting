@@ -17,3 +17,5 @@ date, amount, category, note
 
 ### TODO
     * Move date to 3 position and make it optinal parameter, so user will be able to omit and by default it should be current date
+    * Output of List command should be in CSV format right in terminal
+    

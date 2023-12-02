@@ -30,6 +30,11 @@ func init() {
 		root: rootCmd,
 		impl: RemoveCommand,
 	})
+	RegisterCommand(&RegisterRecord{
+		name: "list",
+		root: rootCmd,
+		impl: ListCommand,
+	})
 	// RegisterReportCommand(rootCmd)
 	// RegisterUpdateCommand(rootCmd)
 }

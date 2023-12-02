@@ -2,13 +2,15 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/kletskovg/accounting/packages/cli/utils"
+	"github.com/kletskovg/accounting/packages/db"
 	"github.com/spf13/cobra"
 )
 
-var addRequiredArgs = 3
+const ADD_REQUIRED_ARGS = 3
 
 type AddArgs struct {
 	date          string
@@ -18,7 +20,7 @@ type AddArgs struct {
 }
 
 func AddCommand(cmd *cobra.Command, args []string) {
-	if len(args) < addRequiredArgs {
+	if len(args) < ADD_REQUIRED_ARGS {
 		fmt.Println("usage: add <date> <amount> <category?> <note?>")
 		return
 	}
@@ -30,6 +32,7 @@ func AddCommand(cmd *cobra.Command, args []string) {
 		return
 	}
 
+	// TODO: seems struct is not needed here
 	addArgs := &AddArgs{
 		date:          args[0],
 		expenseAmount: amount,
@@ -37,6 +40,11 @@ func AddCommand(cmd *cobra.Command, args []string) {
 		note:          utils.ReadArgByIndex(args, 3),
 	}
 
-	// TODO: write transation to DB here
-	fmt.Println("Args: ", addArgs)
+	var result, err = db.InsertTransaction(addArgs.date, addArgs.expenseAmount, addArgs.category, addArgs.note)
+
+	if err != nil {
+		log.Default().Println("ERROR: Cant insert transaction \n", err)
+	}
+
+	log.Default().Println("Transaction added: \n", &result.InsertedID)
 }

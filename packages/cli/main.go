@@ -1,11 +1,9 @@
 package main
 
 import (
-	"github.com/kletskovg/accounting/packages/db"
+	"github.com/kletskovg/accounting/packages/cli/cmd"
 )
 
 func main() {
-	db.Find()
-	// db.ConnectDB(MONGODB_URL)
-	// cmd.Execute()
+	cmd.Execute()
 }

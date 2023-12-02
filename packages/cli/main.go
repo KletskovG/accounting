@@ -1,19 +1,21 @@
 package main
 
 import (
-	"github.com/kletskovg/accounting/packages/cli/cmd"
-	"github.com/kletskovg/accounting/packages/cli/config"
+	"fmt"
+
+	"github.com/kletskovg/accounting/packages/config"
 	"github.com/kletskovg/accounting/packages/db"
-	"github.com/spf13/viper"
 )
 
 func main() {
 	config.PrepareViperConfig()
-	var mongoUrlConfigValue = viper.Get("MONGODB_URL")
-	var mongoUrl, ok = mongoUrlConfigValue.(string)
+	var MONGODB_URL, err = config.GetEnvVariable("MONGODB_URL")
 
-	if ok {
-		db.ConnectDB(mongoUrl)
-		cmd.Execute()
+	if err != nil {
+		panic(err)
 	}
+
+	fmt.Println("connecting, ", MONGODB_URL)
+	db.ConnectDB(MONGODB_URL)
+	// cmd.Execute()
 }

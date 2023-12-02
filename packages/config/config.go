@@ -1,13 +1,19 @@
 package config
 
 import (
-	"errors"
 	"fmt"
+	"log"
 
 	"github.com/spf13/viper"
 )
 
-func PrepareViperConfig() {
+const (
+	MONGODB_URL        = "MONGODB_URL"
+	MONGODB_NAME       = "MONGODB_NAME"
+	MONGODB_COLLECTION = "MONGODB_COLLECTION"
+)
+
+func init() {
 	viper.SetConfigType("env")
 	viper.SetConfigName("config")
 	viper.AddConfigPath("../../")
@@ -17,16 +23,18 @@ func PrepareViperConfig() {
 	}
 }
 
-// TODO: make name paramters some sort of "set of strings"
-func GetEnvVariable(name string) (string, error) {
+func GetEnvVariable(name string) string {
 	var value = viper.Get(name)
 
-	var valueStr, ok = value.(string)
-	var errorResult error = nil
-
-	if !ok {
-		errorResult = errors.New("Variable " + name + "is not a string")
+	if value == nil {
+		log.Fatal("Cant read ", name, "config variable")
 	}
 
-	return valueStr, errorResult
+	var valueStr, ok = value.(string)
+
+	if !ok {
+		log.Fatal("Variable: ", name, "must be string")
+	}
+
+	return valueStr
 }

@@ -8,6 +8,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// TODO: Show results in table format, or at least in json with indentation
+
 func ListCommand(cmd *cobra.Command, args []string) {
 	var limit int = 0
 
@@ -22,6 +24,4 @@ func ListCommand(cmd *cobra.Command, args []string) {
 	for _, result := range transactions {
 		logger.Info(result)
 	}
-
-	// TODO: Implement indentation and logging of transactions with ID
 }

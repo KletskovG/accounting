@@ -16,6 +16,30 @@ date, amount, category, note
 ### HTTP
 
 ### TODO
-    * Move date to 3 position and make it optinal parameter, so user will be able to omit and by default it should be current date
     * Output of List command should be in CSV format right in terminal
+    * Implement update and report commands
+    * HTTP Server
     
+
+### Scenarios
+CMD
+* [x] Add 
+* [] List
+* [] Update
+* [] Remove
+* [] Report
+
+DB
+* [x] Add 
+* [] List
+* [] Update
+* [] Remove
+* [] Report
+
+
+HTTP Server
+* [x] Add 
+* [] List
+* [] Update
+* [] Remove
+* [] Report

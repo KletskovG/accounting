@@ -2,15 +2,16 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"strconv"
+	"time"
 
 	"github.com/kletskovg/accounting/packages/cli/utils"
 	"github.com/kletskovg/accounting/packages/db"
+	"github.com/kletskovg/accounting/packages/logger"
 	"github.com/spf13/cobra"
 )
 
-const ADD_REQUIRED_ARGS = 3
+const AddRequiredArgs = 1
 
 type AddArgs struct {
 	date          string
@@ -20,31 +21,45 @@ type AddArgs struct {
 }
 
 func AddCommand(cmd *cobra.Command, args []string) {
-	if len(args) < ADD_REQUIRED_ARGS {
-		fmt.Println("usage: add <date> <amount> <category?> <note?>")
+	if len(args) < AddRequiredArgs {
+		fmt.Println("usage: add   <amount> <date?> <category?> <note?>")
 		return
 	}
 
-	var amount, error = strconv.Atoi(args[1])
+	var amount, error = strconv.Atoi(args[0])
 
 	if error != nil {
 		fmt.Println(error)
 		return
 	}
 
+	var date = utils.ReadArgByIndex(args, 1)
+
+	if date == "" {
+		date = time.Now().UTC().String()
+	}
+
+	var category = utils.ReadArgByIndex(args, 2)
+
+	if category == "" {
+		category = "Other"
+	}
+
 	// TODO: seems struct is not needed here
 	addArgs := &AddArgs{
-		date:          args[0],
 		expenseAmount: amount,
-		category:      utils.ReadArgByIndex(args, 2),
+		date:          date,
+		category:      category,
 		note:          utils.ReadArgByIndex(args, 3),
 	}
+
+	logger.Info("Inserting transaction with args: \n", addArgs)
 
 	var result, err = db.InsertTransaction(addArgs.date, addArgs.expenseAmount, addArgs.category, addArgs.note)
 
 	if err != nil {
-		log.Default().Println("ERROR: Cant insert transaction \n", err)
+		logger.Error("Cant insert transaction \n", err)
 	}
 
-	log.Default().Println("Transaction added: \n", &result.InsertedID)
+	logger.Info("Transaction added: \n", &result.InsertedID)
 }

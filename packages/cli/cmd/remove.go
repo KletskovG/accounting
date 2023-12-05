@@ -27,7 +27,4 @@ func RemoveCommand(cmd *cobra.Command, args []string) {
 	db.RemoveTransaction(db.RemoveTransactionArgs{
 		IDs: args,
 	})
-
-	// var transactionId = args[0]
-	// fmt.Println("ID of transation which should be removed: ", transactionId)
 }

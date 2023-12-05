@@ -2,9 +2,9 @@ package db
 
 import (
 	"context"
-	"log"
 	"time"
 
+	"github.com/kletskovg/accounting/packages/logger"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -22,7 +22,7 @@ func InsertTransaction(
 		Timestamp: time.Now().String(),
 	}
 
-	log.Default().Println("inserting: ", transaction)
+	logger.Info("inserting: ", transaction)
 
 	return Collection.InsertOne(context.Background(), transaction)
 }

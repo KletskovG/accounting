@@ -58,7 +58,14 @@ func RemoveTransaction(args RemoveTransactionArgs) {
 
 			go func(deleteTransaction Transaction) {
 				defer wg.Done()
-				Collection.DeleteOne(context.Background(), deleteTransaction)
+				logger.Info(deleteTransaction)
+				var transactionID, err = primitive.ObjectIDFromHex(deleteTransaction.ID)
+
+				if err == nil {
+					Collection.DeleteOne(context.Background(), bson.D{{Key: "_id", Value: transactionID}})
+				} else {
+					logger.Error("Cant create ObjectID, ", err, deleteTransaction)
+				}
 			}(transaction)
 		}
 		wg.Wait()

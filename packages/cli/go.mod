@@ -3,6 +3,7 @@ module github.com/kletskovg/accounting/packages/cli
 go 1.21.4
 
 require (
+	github.com/cheynewallace/tabby v1.1.1 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect

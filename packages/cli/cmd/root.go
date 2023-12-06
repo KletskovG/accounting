@@ -19,6 +19,8 @@ var rootCmd = &cobra.Command{
 	},
 }
 
+var IsJsonFormat bool
+
 func init() {
 	RegisterCommand(&RegisterRecord{
 		name: "add",
@@ -37,6 +39,8 @@ func init() {
 	})
 	// RegisterReportCommand(rootCmd)
 	// RegisterUpdateCommand(rootCmd)
+
+	rootCmd.PersistentFlags().BoolVarP(&IsJsonFormat, "json", "j", false, "verbose output")
 }
 
 func Execute() {

@@ -45,7 +45,6 @@ func AddCommand(cmd *cobra.Command, args []string) {
 		category = "Other"
 	}
 
-	// TODO: seems struct is not needed here
 	addArgs := &AddArgs{
 		expenseAmount: amount,
 		date:          date,

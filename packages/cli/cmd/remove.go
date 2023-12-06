@@ -4,11 +4,13 @@ import (
 	"strconv"
 
 	"github.com/kletskovg/accounting/packages/db"
+	"github.com/kletskovg/accounting/packages/logger"
 	"github.com/spf13/cobra"
 )
 
 func RemoveCommand(cmd *cobra.Command, args []string) {
 	if len(args) < 1 {
+		logger.Info("Deleting last transaction")
 		db.RemoveTransaction(db.RemoveTransactionArgs{
 			RemoveLast: true,
 		})

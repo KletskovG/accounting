@@ -5,14 +5,13 @@ import (
 
 	"github.com/kletskovg/accounting/packages/logger"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func ListTransations(limit int) []primitive.D {
+func ListTransations(limit int) []Transaction {
 	var opts = options.Find()
 	opts.SetLimit(int64(limit))
-	opts.SetSort(bson.D{{"timestamp", 1}})
+	opts.SetSort(bson.D{{"timestamp", -1}})
 
 	var cursor, err = Collection.Find(
 		context.Background(),
@@ -26,7 +25,7 @@ func ListTransations(limit int) []primitive.D {
 
 	defer cursor.Close(context.Background())
 
-	var transactions []bson.D
+	var transactions []Transaction
 
 	if err = cursor.All(context.Background(), &transactions); err != nil {
 		logger.Error("Cant process transactions from DB: \n", err)

@@ -18,22 +18,23 @@ date, amount, category, note
 ### TODO
     * Output of List command should be in CSV format right in terminal
     * Implement update and report commands
+    * Use Cobra validation options for command args
     * HTTP Server
     
 
 ### Scenarios
 CMD
 * [x] Add 
-* [] List
+* [x] List
 * [] Update
-* [] Remove
+* [x] Remove
 * [] Report
 
 DB
 * [x] Add 
-* [] List
+* [x] List
 * [] Update
-* [] Remove
+* [x] Remove
 * [] Report
 
 

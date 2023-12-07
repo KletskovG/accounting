@@ -8,6 +8,7 @@ import (
 	"github.com/kletskovg/accounting/packages/cli/utils"
 	"github.com/kletskovg/accounting/packages/db"
 	"github.com/kletskovg/accounting/packages/logger"
+	"github.com/kletskovg/packages/common"
 	"github.com/spf13/cobra"
 )
 
@@ -54,7 +55,7 @@ func AddCommand(cmd *cobra.Command, args []string) {
 	)
 
 	if date == "" {
-		date = time.Now().UTC().Format("2006-01-02T15:04:05")
+		date = time.Now().UTC().Format(common.DateLayout)
 	}
 
 	addArgs := &AddArgs{

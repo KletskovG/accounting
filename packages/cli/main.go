@@ -2,8 +2,6 @@ package main
 
 import "github.com/kletskovg/accounting/packages/cli/cmd"
 
-const DateLayout = "2006-01-02"
-
 func main() {
 	cmd.Execute()
 	// for i := 1; i < 30; i++ {

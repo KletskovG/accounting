@@ -6,12 +6,15 @@ import (
 	"time"
 
 	"github.com/kletskovg/accounting/packages/logger"
+	"github.com/kletskovg/packages/common"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func ReportTransactions(start, end string) {
-	startDate, _ := time.Parse("2006-01-02", start)
-	endDate, _ := time.Parse("2006-01-02", end)
+func ReportTransactions(start, end string) []Transaction {
+	startDate, _ := time.Parse(common.DateLayout, start)
+	endDate, _ := time.Parse(common.DateLayout, end)
+
+	logger.Info(startDate, endDate)
 
 	startTimestamp := startDate.UTC().UnixMilli()
 	endTimestamp := endDate.UTC().UnixMilli()
@@ -19,7 +22,7 @@ func ReportTransactions(start, end string) {
 
 	if err != nil {
 		logger.Info("Can't find transactions: ", err)
-		return
+		return []Transaction{}
 	}
 
 	defer cursor.Close(context.Background())
@@ -27,7 +30,7 @@ func ReportTransactions(start, end string) {
 	var transactions []Transaction
 	if err := cursor.All(context.Background(), &transactions); err != nil {
 		logger.Info("Cant process transactions cursor, ", err)
-		return
+		return []Transaction{}
 	}
 
 	var wg sync.WaitGroup
@@ -37,7 +40,7 @@ func ReportTransactions(start, end string) {
 		wg.Add(1)
 		go func(result Transaction) {
 			defer wg.Done()
-			transactionTimestamp, err := time.Parse("2006-01-02", result.Date)
+			transactionTimestamp, err := time.Parse(common.DateLayout, result.Date)
 
 			if err != nil {
 				logger.Info("Cant parse date, ", result.Date, err)
@@ -51,6 +54,6 @@ func ReportTransactions(start, end string) {
 	}
 
 	wg.Wait()
-	logger.Info("RESULTS")
-	logger.Info(results)
+
+	return results
 }

@@ -23,9 +23,10 @@ var IsJsonFormat bool
 
 func init() {
 	RegisterCommand(&RegisterRecord{
-		name: "add",
-		root: rootCmd,
-		impl: AddCommand,
+		name:          "add",
+		root:          rootCmd,
+		impl:          AddCommand,
+		argsValidator: AddArgsValidator,
 	})
 	RegisterCommand(&RegisterRecord{
 		name: "remove",
@@ -37,10 +38,21 @@ func init() {
 		root: rootCmd,
 		impl: ListCommand,
 	})
+	RegisterCommand(&RegisterRecord{
+		name:          "update",
+		root:          rootCmd,
+		impl:          UpdateCommand,
+		argsValidator: UpdateArgsValidator,
+	})
+	RegisterCommand(&RegisterRecord{
+		name: "report",
+		root: rootCmd,
+		impl: ReportCommand,
+	})
 	// RegisterReportCommand(rootCmd)
 	// RegisterUpdateCommand(rootCmd)
 
-	rootCmd.PersistentFlags().BoolVarP(&IsJsonFormat, "json", "j", false, "verbose output")
+	rootCmd.PersistentFlags().BoolVarP(&IsJsonFormat, "json", "j", false, "format output as json")
 }
 
 func Execute() {

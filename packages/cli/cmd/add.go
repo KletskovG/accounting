@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	"errors"
 	"strconv"
 	"time"
 
@@ -11,7 +11,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const AddRequiredArgs = 1
+const (
+	addRequiredArgs  = 1
+	amountArgIndex   = 0
+	categoryArgIndex = 1
+	dateArgIndex     = 2
+	noteArgIndex     = 3
+)
 
 type AddArgs struct {
 	date          string
@@ -20,36 +26,42 @@ type AddArgs struct {
 	note          string
 }
 
-func AddCommand(cmd *cobra.Command, args []string) {
-	if len(args) < AddRequiredArgs {
-		fmt.Println("usage: add   <amount> <date?> <category?> <note?>")
-		return
+func AddArgsValidator(cmd *cobra.Command, args []string) error {
+	if len(args) >= addRequiredArgs {
+		return nil
 	}
+	var argError = errors.New("add command requires minimum 1 argument - amount of expense")
+	logger.Info(argError)
+	return argError
+}
 
-	var amount, error = strconv.Atoi(args[0])
+func AddCommand(cmd *cobra.Command, args []string) {
+	var amount, error = strconv.Atoi(args[amountArgIndex])
 
 	if error != nil {
-		fmt.Println(error)
+		logger.Error(error)
 		return
 	}
 
-	var date = utils.ReadArgByIndex(args, 1)
-
-	if date == "" {
-		date = time.Now().UTC().String()
-	}
-
-	var category = utils.ReadArgByIndex(args, 2)
+	var category = utils.ReadArgByIndex(args, categoryArgIndex)
 
 	if category == "" {
 		category = "Other"
+	}
+
+	var date = utils.ParseDate(
+		utils.ReadArgByIndex(args, dateArgIndex),
+	)
+
+	if date == "" {
+		date = time.Now().UTC().Format("2006-01-02T15:04:05")
 	}
 
 	addArgs := &AddArgs{
 		expenseAmount: amount,
 		date:          date,
 		category:      category,
-		note:          utils.ReadArgByIndex(args, 3),
+		note:          utils.ReadArgByIndex(args, noteArgIndex),
 	}
 
 	logger.Info("Inserting transaction with args: \n", addArgs)

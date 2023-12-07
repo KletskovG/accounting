@@ -8,9 +8,10 @@ import (
 )
 
 type RegisterRecord struct {
-	name string
-	root *cobra.Command
-	impl func(cmd *cobra.Command, args []string)
+	name          string
+	root          *cobra.Command
+	impl          func(cmd *cobra.Command, args []string)
+	argsValidator func(cmd *cobra.Command, args []string) error
 }
 
 func RegisterCommand(record *RegisterRecord) {
@@ -21,6 +22,13 @@ func RegisterCommand(record *RegisterRecord) {
 			var cmd = exec.Command("clear")
 			cmd.Stdout = os.Stdout
 			cmd.Run()
+		},
+		Args: func(cmd *cobra.Command, args []string) error {
+			if record.argsValidator == nil {
+				return nil
+			}
+
+			return record.argsValidator(cmd, args)
 		},
 	}
 

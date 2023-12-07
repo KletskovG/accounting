@@ -12,10 +12,11 @@ import (
 
 func UpdateTransaction(
 	id string,
-	date string,
-	expenseAmount int,
-	category,
-	note string,
+	// expenseAmount int,
+	// date,
+	// category,
+	// note string,
+	transaction *Transaction,
 ) *mongo.SingleResult {
 	transactionID, err := primitive.ObjectIDFromHex(id)
 
@@ -23,17 +24,11 @@ func UpdateTransaction(
 		logger.Error("Cant get ID of transaction, ", err, id)
 	}
 
-	transaction := Transaction{
-		Date:      date,
-		Expense:   int32(expenseAmount),
-		Category:  category,
-		Note:      note,
-		Timestamp: time.Now().String(),
-	}
+	transaction.Timestamp = time.Now().String()
 
 	return Collection.FindOneAndUpdate(
 		context.Background(),
 		bson.D{{Key: "_id", Value: transactionID}},
-		transaction,
+		bson.D{{Key: "$set", Value: transaction}},
 	)
 }

@@ -19,6 +19,7 @@ date, amount, category, note
     * HTTP Server
     * DB module should not log fatal errors to prevent app from crash
     * Last time finished on Update command implementation - check how DB works and implement CLI verison of command
+    * Support ENV variable in CMD package
     
 
 ### Scenarios

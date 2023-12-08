@@ -59,7 +59,7 @@ func RemoveTransaction(args RemoveTransactionArgs) {
 
 			go func(deleteTransaction common.Transaction) {
 				defer wg.Done()
-				logger.Info(deleteTransaction)
+				logger.Info("Deleting...", deleteTransaction)
 				var transactionID, err = primitive.ObjectIDFromHex(deleteTransaction.ID)
 
 				if err == nil {

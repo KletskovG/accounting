@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/kletskovg/accounting/packages/logger"
+	"github.com/kletskovg/packages/common"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -14,7 +15,7 @@ func InsertTransaction(
 	category,
 	note string,
 ) (*mongo.InsertOneResult, error) {
-	transaction := Transaction{
+	transaction := common.Transaction{
 		Date:      date,
 		Expense:   int32(expenseAmount),
 		Category:  category,

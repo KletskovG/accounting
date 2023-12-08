@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/kletskovg/accounting/packages/logger"
+	"github.com/kletskovg/packages/common"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -16,7 +17,7 @@ func UpdateTransaction(
 	// date,
 	// category,
 	// note string,
-	transaction *Transaction,
+	transaction *common.Transaction,
 ) *mongo.SingleResult {
 	transactionID, err := primitive.ObjectIDFromHex(id)
 

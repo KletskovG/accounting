@@ -7,6 +7,7 @@ import (
 	"github.com/kletskovg/accounting/packages/cli/utils"
 	"github.com/kletskovg/accounting/packages/db"
 	"github.com/kletskovg/accounting/packages/logger"
+	"github.com/kletskovg/packages/common"
 	"github.com/spf13/cobra"
 )
 
@@ -38,7 +39,7 @@ func UpdateCommand(cmd *cobra.Command, args []string) {
 		logger.Error("Cant convert expense to number, ", err)
 	}
 
-	var result = db.UpdateTransaction(transactionID, &db.Transaction{
+	var result = db.UpdateTransaction(transactionID, &common.Transaction{
 		Expense:  int32(amount),
 		Note:     note,
 		Date:     date,

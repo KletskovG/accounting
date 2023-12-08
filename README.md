@@ -16,8 +16,6 @@ date, amount, category, note
 ### HTTP
 
 ### TODO
-    * Implement update and report commands
-    * Use Cobra validation options for command args
     * HTTP Server
     * DB module should not log fatal errors to prevent app from crash
     * Last time finished on Update command implementation - check how DB works and implement CLI verison of command
@@ -27,21 +25,21 @@ date, amount, category, note
 CMD
 * [x] Add 
 * [x] List
-* [] Update
+* [x] Update
 * [x] Remove
-* [] Report
+* [x] Report
 
 DB
 * [x] Add 
 * [x] List
-* [] Update
+* [x] Update
 * [x] Remove
-* [] Report
+* [x] Report
 
 
 HTTP Server
 * [x] Add 
-* [] List
+* [x] List
 * [] Update
 * [] Remove
 * [] Report

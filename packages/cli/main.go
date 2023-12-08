@@ -1,6 +1,8 @@
 package main
 
-import "github.com/kletskovg/accounting/packages/cli/cmd"
+import (
+	"github.com/kletskovg/accounting/packages/cli/cmd"
+)
 
 func main() {
 	cmd.Execute()
@@ -12,7 +14,7 @@ func main() {
 	// 		dayStr = strconv.Itoa(i)
 	// 	}
 
-	// 	date := "2023-12-" + dayStr
-	// 	db.InsertTransaction(date, 1000, "test", "test")
+	// 	date := "2023-11-" + dayStr
+	// 	db.InsertTransaction(date, 1000, "", "")
 	// }
 }

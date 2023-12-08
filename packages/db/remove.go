@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/kletskovg/accounting/packages/logger"
+	"github.com/kletskovg/packages/common"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -47,7 +48,7 @@ func RemoveTransaction(args RemoveTransactionArgs) {
 			logger.Error("Cant find documents from DB", err)
 		}
 
-		var transactions []Transaction
+		var transactions []common.Transaction
 
 		if err = cursor.All(context.Background(), &transactions); err != nil {
 			logger.Error("Cant process transactions from DB: \n", err)
@@ -56,7 +57,7 @@ func RemoveTransaction(args RemoveTransactionArgs) {
 		for _, transaction := range transactions {
 			wg.Add(1)
 
-			go func(deleteTransaction Transaction) {
+			go func(deleteTransaction common.Transaction) {
 				defer wg.Done()
 				logger.Info(deleteTransaction)
 				var transactionID, err = primitive.ObjectIDFromHex(deleteTransaction.ID)

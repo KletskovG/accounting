@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"os"
 	"strconv"
 	"time"
 
@@ -35,8 +36,6 @@ func ReportArgsValidator(rootCmd *cobra.Command, args []string) error {
 	return nil
 }
 
-// Option - day since now
-
 func ReportCommand(rootCmd *cobra.Command, args []string) {
 	var start, end string
 
@@ -64,6 +63,17 @@ func ReportCommand(rootCmd *cobra.Command, args []string) {
 		)
 	}
 
-	// TODO: Finished here
-	db.ReportTransactions(start, end)
+	transcations := db.ReportTransactions(start, end)
+
+	report := common.GetCsvReport(transcations)
+	file, err := os.Create("report.csv") // TODO: Support output filepath
+
+	if err != nil {
+		logger.Info("Cant write report to file", err)
+		return
+	}
+
+	defer file.Close()
+	file.WriteString(report)
+	logger.Info("Report written to report.csv")
 }

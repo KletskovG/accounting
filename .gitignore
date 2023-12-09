@@ -20,4 +20,6 @@
 .env
 *.env
 ./packages/cli/cli
+./packages/cli/cli_linux
+./packages/cli/cli_macos_x86
 ./packages/server/server

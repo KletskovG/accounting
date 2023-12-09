@@ -34,7 +34,8 @@ jobs:
         with:
           go-version: 1.21.4
       - run: |
-          CGO_ENABLED=0 GOOS=linux go build -C ./packages/cli
+          CGO_ENABLED=0 GOOS=linux go build -C ./packages/cli -o cli_linux
+          CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -C ./packages/cli -o cli_macos_x86
           bash ./deployment/aws-config.sh ${{ secrets.AWS_ACCESS_KEY }} ${{ secrets.AWS_SECRET_ACCESS_KEY }} ${{ secrets.AWS_ZONE }} && \
           bash ./deployment/accounting-cli-upload.sh ${{ secrets.CLI_S3_URL }}
   notification:

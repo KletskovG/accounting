@@ -49,7 +49,6 @@ func GetEnvVariable(name string) string {
 }
 
 func CheckUserConfig() {
-	// fs.Stat(,common.CliUserConfigPath)
 	if _, err := os.Stat(common.CliUserConfigPath); err != nil {
 		log.Fatal("Cant find user-config file, run 'config command'")
 	}

@@ -9,12 +9,13 @@ import (
 
 func main() {
 	mux := http.NewServeMux()
+	mux.HandleFunc("", handlers.Ping)
+	mux.HandleFunc("/ping", handlers.Ping)
 	mux.HandleFunc("/list", handlers.ListHander)
 	mux.HandleFunc("/add", handlers.AddHandler)
 	mux.HandleFunc("/remove", handlers.RemoveHandler)
 	mux.HandleFunc("/update", handlers.UpdateHandler)
 	mux.HandleFunc("/report", handlers.ReportHandler)
-	mux.HandleFunc("/", handlers.Ping)
 
 	var port = ":8080"
 

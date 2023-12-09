@@ -10,3 +10,8 @@ const (
 	Month  = 30 * Day
 	Year   = 365 * Day
 )
+
+const (
+	HeaderContentType = "Content-Type"
+	ContentTypeJson   = "application/json"
+)

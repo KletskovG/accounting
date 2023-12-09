@@ -8,6 +8,7 @@ import (
 
 	"github.com/kletskovg/accounting/packages/db"
 	"github.com/kletskovg/accounting/packages/logger"
+	"github.com/kletskovg/packages/common"
 )
 
 func ListHander(response http.ResponseWriter, request *http.Request) {
@@ -21,7 +22,7 @@ func ListHander(response http.ResponseWriter, request *http.Request) {
 
 	transactions := db.ListTransations(limit)
 
-	response.Header().Set("Content-Type", "application/json")
+	response.Header().Set(common.HeaderContentType, common.ContentTypeJson)
 	response.WriteHeader(http.StatusOK)
 	result, err := json.Marshal(transactions)
 

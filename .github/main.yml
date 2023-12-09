@@ -1,0 +1,36 @@
+name: Main CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types: [opened, reopened]
+jobs:
+  Backend:
+    name: Push InfraServer to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+          with:
+          go-version: '1.21.4'
+      - name: Login to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKER_LOGIN }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: ./packages/server
+          file: ./packages/server/Dockerfile
+          tags: ${{ secrets.SERVER_PACKAGE_IMAGE }}
+          push: true
+  notification:
+    needs: [Backend]
+    name: Send notification
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl https://telegram.kletskovg.tech/done/accounting_published

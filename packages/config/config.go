@@ -1,9 +1,10 @@
 package config
 
 import (
-	"fmt"
 	"log"
+	"os"
 
+	"github.com/kletskovg/accounting/packages/logger"
 	"github.com/spf13/viper"
 )
 
@@ -17,9 +18,11 @@ func init() {
 	viper.SetConfigType("env")
 	viper.SetConfigName("config")
 	viper.AddConfigPath("../../")
+	viper.SetEnvPrefix("MONGODB")
+	viper.AutomaticEnv()
 	err := viper.ReadInConfig()
 	if err != nil {
-		panic(fmt.Errorf("fatal error config file: %w", err))
+		logger.Info("Cant read config file, switching to ENV variables")
 	}
 }
 
@@ -27,11 +30,16 @@ func GetEnvVariable(name string) string {
 	var value = viper.Get(name)
 
 	if value == nil {
-		log.Fatal("Cant read ", name, "config variable")
+		value = os.Getenv(name)
+
+		if value == "" {
+			logger.Info("Cant read ", name, "env variable")
+		}
 	}
 
 	var valueStr, ok = value.(string)
 
+	logger.Info(valueStr)
 	if !ok {
 		log.Fatal("Variable: ", name, "must be string")
 	}

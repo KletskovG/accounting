@@ -7,6 +7,7 @@ import (
 
 	"github.com/kletskovg/accounting/packages/db"
 	"github.com/kletskovg/accounting/packages/logger"
+	"github.com/kletskovg/packages/common"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -28,23 +29,33 @@ func deleteTransactionByID(response http.ResponseWriter, request *http.Request, 
 		return
 	}
 
-	logger.Info("Transaction to be deleted", transactionID.String())
+	logger.Info("Transaction to be deleted", transactionID.Hex())
 
 	go db.RemoveTransaction(db.RemoveTransactionArgs{
-		IDs: []string{transactionID.String()},
+		IDs: []string{transactionID.Hex()},
 	})
 
-	logger.Info(transactionID.String(), "deleted")
+	logger.Info(transactionID.Hex(), "deleted")
 
-	response.Header().Set("Content-Type", "application/json")
+	response.Header().Set(common.HeaderContentType, common.ContentTypeJson)
 	response.WriteHeader(http.StatusOK)
-	io.WriteString(response, "will delete transaction "+transactionID.String())
+	io.WriteString(response, "will delete transaction "+transactionID.Hex())
 	return
 }
 
-// TODO: Support remove last option
-// TODO: Stopped here, somehow cant delete by id, also need to delete last transaction
 func RemoveHandler(response http.ResponseWriter, request *http.Request) {
+	if !request.URL.Query().Has("transaction") {
+		go db.RemoveTransaction(db.RemoveTransactionArgs{
+			RemoveLast: true,
+		})
+
+		response.Header().Set(common.HeaderContentType, common.ContentTypeJson)
+		response.WriteHeader(http.StatusOK)
+		// Maybe sand transaction here
+		io.WriteString(response, "Last transaction was deleted")
+		return
+	}
+
 	transactionValue := request.URL.Query().Get("transaction")
 	transactionsToDelete, err := strconv.Atoi(transactionValue)
 

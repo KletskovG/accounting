@@ -48,7 +48,7 @@ func AddHandler(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	response.Header().Set("Content-Type", "application/json")
+	response.Header().Set(common.HeaderContentType, common.ContentTypeJson)
 	response.WriteHeader(http.StatusCreated)
 	io.WriteString(response, transactionID.String())
 }

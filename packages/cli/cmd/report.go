@@ -40,6 +40,7 @@ func ReportCommand(rootCmd *cobra.Command, args []string) {
 	var start, end string
 
 	if len(args) == 0 {
+		// TODO: Reuse in Handler
 		currentTimestamp := time.Now().UnixMilli()
 		end = time.UnixMilli(currentTimestamp).Format(common.DateLayout)
 		start = time.UnixMilli((currentTimestamp - int64(common.Month))).Format(common.DateLayout)

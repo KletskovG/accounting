@@ -1,8 +1,10 @@
 package config
 
 import (
+	"bufio"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/kletskovg/accounting/packages/logger"
 	"github.com/kletskovg/packages/common"
@@ -19,6 +21,7 @@ func init() {
 	viper.SetConfigType("env")
 	viper.SetConfigName("config")
 	viper.AddConfigPath("../../")
+	viper.AddConfigPath("./")
 	viper.SetEnvPrefix("MONGODB")
 	viper.AutomaticEnv()
 	err := viper.ReadInConfig()
@@ -50,8 +53,36 @@ func GetEnvVariable(name string) string {
 
 func CheckUserConfig() {
 	if _, err := os.Stat(common.CliUserConfigPath); err != nil {
-		log.Fatal("Cant find user-config file, run 'config command'")
+		logger.Info("Cant find configuration file")
+		logger.Info("Please, provide env config variables below (format - <key> <value>): ")
+		reader := bufio.NewReader(os.Stdin)
+		args, _ := reader.ReadString('\n')
+		createUserConfig(args)
+	}
+}
+
+func createUserConfig(args string) {
+	splitResult := strings.Split(args, " ")
+	logger.Info("Args:", splitResult)
+	logger.Info(len(splitResult) % 2)
+	envVars := [][]string{}
+
+	for i := 1; i < len(splitResult); i += 2 {
+		envVars = append(envVars, []string{splitResult[i-1], splitResult[i]})
 	}
 
-	// TODO: Stopped here, need to parse user config and upload it to viper
+	configFile, err := os.Create(common.CliUserConfigPath)
+
+	if err != nil {
+		logger.Error("Cant create config file", err)
+	}
+
+	defer configFile.Close()
+
+	for _, envVariable := range envVars {
+		envVariableStr := envVariable[0] + "=" + envVariable[1] + "\n"
+		configFile.WriteString(envVariableStr)
+	}
+
+	logger.Info("Config file created!", configFile.Name())
 }

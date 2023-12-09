@@ -49,6 +49,11 @@ func init() {
 		root: rootCmd,
 		impl: ReportCommand,
 	})
+	RegisterCommand(&RegisterRecord{
+		name: "config",
+		root: rootCmd,
+		impl: configCommand,
+	})
 	// RegisterReportCommand(rootCmd)
 	// RegisterUpdateCommand(rootCmd)
 

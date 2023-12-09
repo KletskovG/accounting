@@ -42,4 +42,4 @@ jobs:
     name: Send notification
     runs-on: ubuntu-latest
     steps:
-      - run: curl https://telegram.kletskovg.tech/done/accounting_published
+      - run: curl https://telegram.kletskovg.tech/done/Accounting%20Published

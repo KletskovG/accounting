@@ -55,7 +55,7 @@ func AddCommand(cmd *cobra.Command, args []string) {
 	)
 
 	if date == "" {
-		date = time.Now().UTC().Format(common.DateLayout)
+		date = time.Now().Format(common.DateLayout)
 	}
 
 	addArgs := &AddArgs{

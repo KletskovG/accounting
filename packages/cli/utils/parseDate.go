@@ -11,7 +11,8 @@ func ParseDate(input string) string {
 	result, err := time.Parse(common.DateLayout, input)
 
 	if err != nil {
-		logger.Error("Cant parse date, ", input, err)
+		logger.Info("Cant parse date, ", input, err)
+		return ""
 	}
 
 	return result.Format(common.DateLayout)

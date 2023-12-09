@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"fmt"
 	"log"
 	"runtime/debug"
 )
@@ -14,5 +15,5 @@ func Error(messages ...any) {
 }
 
 func Info(messages ...any) {
-	log.Println(infoPrefix, messages)
+	log.Println(infoPrefix, fmt.Sprint(messages))
 }

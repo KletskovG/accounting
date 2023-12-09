@@ -63,10 +63,9 @@ func CheckUserConfig() {
 
 func createUserConfig(args string) {
 	splitResult := strings.Split(args, " ")
-	logger.Info("Args:", splitResult)
-	logger.Info(len(splitResult) % 2)
 	envVars := [][]string{}
 
+	// TODO: Reuse in config and cli
 	for i := 1; i < len(splitResult); i += 2 {
 		envVars = append(envVars, []string{splitResult[i-1], splitResult[i]})
 	}

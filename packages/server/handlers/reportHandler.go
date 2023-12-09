@@ -1,8 +1,13 @@
 package handlers
 
 import (
+	"crypto/sha1"
+	"encoding/hex"
+	"fmt"
 	"io"
 	"net/http"
+	"net/url"
+	"os"
 	"strconv"
 	"time"
 
@@ -48,5 +53,22 @@ func ReportHandler(response http.ResponseWriter, request *http.Request) {
 	report := common.GetCsvReport(transactions)
 	response.WriteHeader(http.StatusOK)
 	response.Header().Add(common.HeaderContentType, common.ContentTypeJson)
-	io.WriteString(response, report)
+	io.WriteString(response, "OK, Wait for S3 link")
+
+	timestamp := string(time.Now().UnixMilli())
+	sha := sha1.New()
+	sha.Write([]byte(timestamp))
+	hash := hex.EncodeToString(sha.Sum(nil))
+	logger.Info("HASH FOR FILE IS ", hash)
+
+	reportFile, createError := os.Create("/tmp/" + hash)
+
+	if createError != nil {
+		message := "Cant create tmp file with report"
+		logger.Info(message)
+		go http.Get(
+			fmt.Sprint("%s/done/%s", common.TelegramApiUrl, url.QueryEscape(message)),
+		)
+	}
+
 }

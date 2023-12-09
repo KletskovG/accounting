@@ -16,4 +16,10 @@ const (
 	ContentTypeJson   = "application/json"
 )
 
+<<<<<<< Updated upstream
 const CliUserConfigPath = "./config.env"
+=======
+const CliUserConfigPath = "./user-config.env"
+
+const TelegramApiUrl = "https://telegram.kletskovg.tech"
+>>>>>>> Stashed changes

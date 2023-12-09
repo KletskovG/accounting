@@ -32,8 +32,8 @@ CMD
 * [x] Update
 * [x] Remove
 * [x] Report
-* [] Global config
-* [] Init command
+* [x] Global config
+* [x] Init command
 
 DB
 * [x] Add 

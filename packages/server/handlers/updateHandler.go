@@ -40,7 +40,7 @@ func UpdateHandler(response http.ResponseWriter, request *http.Request) {
 	var dateValue string
 
 	if err != nil {
-		// TODO: Update default date value - right now it breaks logic
+		// TODO: Update default date value - right now it breaks logic, ovverrides current date
 		dateValue = ""
 	}
 

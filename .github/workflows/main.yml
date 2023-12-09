@@ -25,6 +25,8 @@ jobs:
           file: ./Dockerfile.server
           tags: ${{ secrets.SERVER_PACKAGE_IMAGE }}
           push: true
+  CLI:
+    name: Build CLI binary and upload S3
   notification:
     needs: [Server]
     name: Send notification

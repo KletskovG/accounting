@@ -16,12 +16,13 @@ date, amount, category, note
 ### HTTP
 
 ### TODO
-    * HTTP Server
     * DB module should not log fatal errors to prevent app from crash
     * Last time finished on Update command implementation - check how DB works and implement CLI verison of command
-    * Support ENV variable in CMD package
+    * Add global config to CLI
+    * Add init command to CLI
     * Swithc to plain body HTTP handler
     * Previous bullet wil allow to reuse code in CMD and HTTP handlers
+    * Finish HTTP Server
     
 
 ### Scenarios
@@ -31,6 +32,8 @@ CMD
 * [x] Update
 * [x] Remove
 * [x] Report
+* [] Global config
+* [] Init command
 
 DB
 * [x] Add 

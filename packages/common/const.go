@@ -15,3 +15,5 @@ const (
 	HeaderContentType = "Content-Type"
 	ContentTypeJson   = "application/json"
 )
+
+const CliUserConfigPath = "./user-config.env"

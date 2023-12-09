@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/kletskovg/accounting/packages/logger"
+	"github.com/kletskovg/packages/common"
 	"github.com/spf13/viper"
 )
 
@@ -27,6 +28,7 @@ func init() {
 }
 
 func GetEnvVariable(name string) string {
+	CheckUserConfig()
 	var value = viper.Get(name)
 
 	if value == nil {
@@ -44,4 +46,13 @@ func GetEnvVariable(name string) string {
 	}
 
 	return valueStr
+}
+
+func CheckUserConfig() {
+	// fs.Stat(,common.CliUserConfigPath)
+	if _, err := os.Stat(common.CliUserConfigPath); err != nil {
+		log.Fatal("Cant find user-config file, run 'config command'")
+	}
+
+	// TODO: Stopped here, need to parse user config and upload it to viper
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/kletskovg/accounting/packages/logger"
 	"github.com/kletskovg/accounting/server/handlers"
@@ -21,6 +22,9 @@ func main() {
 
 	logger.Info("Server starting on", port)
 	go http.Get("https://telegram.kletskovg.tech/done/accounting_server_started")
+
+	logger.Info("IS DEV")
+	os.Getenv("DEV")
 
 	error := http.ListenAndServe(port, mux)
 

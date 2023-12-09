@@ -16,4 +16,4 @@ const (
 	ContentTypeJson   = "application/json"
 )
 
-const CliUserConfigPath = "./user-config.env"
+const CliUserConfigPath = "./config.env"

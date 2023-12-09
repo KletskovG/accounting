@@ -17,6 +17,8 @@ const (
 	MONGODB_COLLECTION = "MONGODB_COLLECTION"
 )
 
+var requiredVars = []string{MONGODB_COLLECTION, MONGODB_NAME, MONGODB_URL}
+
 func init() {
 	viper.SetConfigType("env")
 	viper.SetConfigName("config")
@@ -55,6 +57,11 @@ func CheckUserConfig() {
 	if _, err := os.Stat(common.CliUserConfigPath); err != nil {
 		logger.Info("Cant find configuration file")
 		logger.Info("Please, provide env config variables below (format - <key> <value>): ")
+		varsStr := common.ReduceSlice(requiredVars, func(acc, curr string) string {
+			acc += " " + curr
+			return acc
+		}, "")
+		logger.Info("Required variables: ", varsStr)
 		reader := bufio.NewReader(os.Stdin)
 		args, _ := reader.ReadString('\n')
 		createUserConfig(args)
@@ -65,7 +72,6 @@ func createUserConfig(args string) {
 	splitResult := strings.Split(args, " ")
 	envVars := [][]string{}
 
-	// TODO: Reuse in config and cli
 	for i := 1; i < len(splitResult); i += 2 {
 		envVars = append(envVars, []string{splitResult[i-1], splitResult[i]})
 	}
@@ -84,4 +90,8 @@ func createUserConfig(args string) {
 	}
 
 	logger.Info("Config file created!", configFile.Name())
+	viperReInitError := viper.ReadInConfig()
+	if viperReInitError != nil {
+		logger.Info("Cant read config file, switching to ENV variables")
+	}
 }

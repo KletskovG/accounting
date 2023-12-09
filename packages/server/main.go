@@ -9,7 +9,7 @@ import (
 
 func main() {
 	mux := http.NewServeMux()
-	mux.HandleFunc("", handlers.Ping)
+	mux.HandleFunc("/", handlers.Ping)
 	mux.HandleFunc("/ping", handlers.Ping)
 	mux.HandleFunc("/list", handlers.ListHander)
 	mux.HandleFunc("/add", handlers.AddHandler)
@@ -20,6 +20,8 @@ func main() {
 	var port = ":8080"
 
 	logger.Info("Server starting on", port)
+	go http.Get("https://telegram.kletskovg.tech/done/accounting_server_started")
+
 	error := http.ListenAndServe(port, mux)
 
 	if error != nil {

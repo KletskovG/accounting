@@ -39,7 +39,6 @@ func GetEnvVariable(name string) string {
 
 	var valueStr, ok = value.(string)
 
-	logger.Info(valueStr)
 	if !ok {
 		log.Fatal("Variable: ", name, "must be string")
 	}

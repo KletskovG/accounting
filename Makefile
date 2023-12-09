@@ -7,6 +7,6 @@ cli:
 	go build ./packages/cli/main.go
 
 docker:
-	docker build . -t kletskovg/accounting:server --file=Dockerfile.server
+	docker build . -t kletskovg/accounting:server -f deployment/Dockerfile.server
 docker_run:
-	docker run kletskovg/accounting:server -p "8080:8080"
+	docker run  -p "8080:8080" kletskovg/accounting:server

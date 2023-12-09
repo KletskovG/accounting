@@ -5,8 +5,3 @@ start:
 
 build:
 	go build
-
-docker:
-	docker build . -t kletskovg/test
-docker_run:
-	docker run kletskovg/test

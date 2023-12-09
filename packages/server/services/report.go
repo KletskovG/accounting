@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/kletskovg/accounting/packages/config"
 	"github.com/kletskovg/accounting/packages/logger"
@@ -26,8 +27,8 @@ func UploadReport(report string) {
 	reportFile.WriteString(report)
 
 	defer reportFile.Close()
-	bucketName := config.GetEnvVariable(config.ACC_AWS_BUCKET)
-	uploadResult := exec.Command("aws", "s3", "--endpoint-url=https://storage.yandexcloud.net", "cp", reportFile.Name(), "s3://", bucketName+reportFile.Name())
+	bucketName := strings.TrimSpace(config.GetEnvVariable(config.ACC_AWS_BUCKET))
+	uploadResult := exec.Command("aws", "s3", "--endpoint-url=https://storage.yandexcloud.net", "cp", reportFile.Name(), "s3://"+bucketName+reportFile.Name())
 
 	if uploadError := uploadResult.Run(); uploadError != nil {
 		logger.Info("Cant upload file to S3 ", uploadError)

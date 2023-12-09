@@ -14,6 +14,7 @@ func main() {
 	mux.HandleFunc("/remove", handlers.RemoveHandler)
 	mux.HandleFunc("/update", handlers.UpdateHandler)
 	mux.HandleFunc("/report", handlers.ReportHandler)
+	mux.HandleFunc("/", handlers.Ping)
 
 	var port = ":8080"
 

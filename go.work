@@ -1,0 +1,10 @@
+go 1.21.4
+
+use (
+	./packages/cli
+	./packages/config
+	./packages/db
+	./packages/logger
+	./packages/common	
+	./packages/server	
+)

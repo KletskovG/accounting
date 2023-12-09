@@ -65,18 +65,24 @@ func GetEnvVariable(name string) string {
 }
 
 func CheckUserConfig() {
-	if _, err := os.Stat(common.CliUserConfigPath); err != nil {
-		logger.Info("Cant find configuration file")
-		logger.Info("Please, provide env config variables below (format - <key> <value>): ")
-		varsStr := common.ReduceSlice(requiredVars, func(acc, curr string) string {
-			acc += " " + curr
-			return acc
-		}, "")
-		logger.Info("Required variables: ", varsStr)
-		reader := bufio.NewReader(os.Stdin)
-		args, _ := reader.ReadString('\n')
-		createUserConfig(args)
+	if _, err := os.Stat(common.CliUserConfigPath); err == nil {
+		return
 	}
+
+	if len(viper.AllKeys()) > 0 {
+		return
+	}
+
+	logger.Info("Cant find configuration file")
+	logger.Info("Please, provide env config variables below (format - <key> <value>): ")
+	varsStr := common.ReduceSlice(requiredVars, func(acc, curr string) string {
+		acc += " " + curr
+		return acc
+	}, "")
+	logger.Info("Required variables: ", varsStr)
+	reader := bufio.NewReader(os.Stdin)
+	args, _ := reader.ReadString('\n')
+	createUserConfig(args)
 }
 
 func createUserConfig(args string) {

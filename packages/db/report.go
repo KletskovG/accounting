@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"sort"
 	"sync"
 	"time"
 
@@ -54,6 +55,18 @@ func ReportTransactions(start, end string) []common.Transaction {
 	}
 
 	wg.Wait()
+
+	sort.Slice(results, func(i, j int) bool {
+		leftTimestamp, startErr := time.Parse(common.DateLayout, results[i].Date)
+		rightTimestamp, endErr := time.Parse(common.DateLayout, results[j].Date)
+
+		if startErr != nil || endErr != nil {
+			logger.Info("Report: cant parse dates to sort transactions, ", startErr, endErr)
+			return false
+		}
+
+		return leftTimestamp.UnixMilli() > rightTimestamp.UnixMilli()
+	})
 
 	return results
 }

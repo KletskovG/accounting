@@ -35,10 +35,13 @@ func UploadReport(report, hostname string) {
 		return
 	}
 
-	requestURL := hostname + "/done/" + url.PathEscape(common.Hosts().StorageAPIURL+"/"+bucketName+reportFile.Name())
+	reportURL := common.Hosts().StorageAPIURL + "/" + bucketName + reportFile.Name()
+	requestURL := hostname + "/done/" + url.PathEscape(reportURL)
 	_, requestError := http.Get(requestURL)
 
 	if requestError != nil {
 		logger.Info("Cant send report to", hostname, " ", requestError)
 	}
+
+	logger.Info("Uploaded new report, ", reportURL)
 }

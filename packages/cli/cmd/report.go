@@ -76,5 +76,7 @@ func ReportCommand(rootCmd *cobra.Command, args []string) {
 
 	defer file.Close()
 	file.WriteString(report)
+	logger.Info("\n" + report + "\n")
+	logger.Info("========")
 	logger.Info("Report written to report.csv")
 }

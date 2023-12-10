@@ -12,14 +12,14 @@ import (
 	"github.com/kletskovg/packages/common"
 )
 
-func UploadReport(report string) {
+func UploadReport(report, hostname string) {
 	reportFile, createError := os.CreateTemp("/tmp/", "report.*.csv")
 
 	if createError != nil {
 		message := "Cant create tmp file with report " + createError.Error()
 		logger.Info(message)
 		go http.Get(
-			common.TelegramApiUrl + "/done/" + url.PathEscape(message),
+			hostname + "/done/" + url.PathEscape(message),
 		)
 		return
 	}
@@ -28,14 +28,17 @@ func UploadReport(report string) {
 
 	defer reportFile.Close()
 	bucketName := strings.TrimSpace(config.GetEnvVariable(config.ACC_AWS_BUCKET))
-	uploadResult := exec.Command("aws", "s3", "--endpoint-url=https://storage.yandexcloud.net", "cp", reportFile.Name(), "s3://"+bucketName+reportFile.Name())
+	uploadResult := exec.Command("aws", "s3", "--endpoint-url="+common.Hosts().StorageAPIURL, "cp", reportFile.Name(), "s3://"+bucketName+reportFile.Name())
 
 	if uploadError := uploadResult.Run(); uploadError != nil {
 		logger.Info("Cant upload file to S3 ", uploadError)
 		return
 	}
 
-	http.Get(
-		common.TelegramApiUrl + "/done/" + url.PathEscape("https://storage.yandexcloud.net/"+bucketName+reportFile.Name()),
-	)
+	requestURL := hostname + "/done/" + url.PathEscape(common.Hosts().StorageAPIURL+"/"+bucketName+reportFile.Name())
+	_, requestError := http.Get(requestURL)
+
+	if requestError != nil {
+		logger.Info("Cant send report to", hostname, " ", requestError)
+	}
 }

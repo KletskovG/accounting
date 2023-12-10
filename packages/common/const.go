@@ -18,5 +18,16 @@ const (
 
 const CliUserConfigPath = "./config.env"
 
-const TelegramApiUrl = "https://telegram.kletskovg.tech"
 const MODE_PROD = "prod"
+
+type hosts struct {
+	TelegramAPIURL string
+	StorageAPIURL  string
+}
+
+func Hosts() hosts {
+	return hosts{
+		TelegramAPIURL: "https://telegram.kletskovg.tech",
+		StorageAPIURL:  "https://storage.yandexcloud.net",
+	}
+}

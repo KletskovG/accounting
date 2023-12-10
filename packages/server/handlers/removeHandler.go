@@ -51,7 +51,7 @@ func RemoveHandler(response http.ResponseWriter, request *http.Request) {
 
 		response.Header().Set(common.HeaderContentType, common.ContentTypeJson)
 		response.WriteHeader(http.StatusOK)
-		// Maybe sand transaction here
+		// Maybe send transaction here
 		io.WriteString(response, "Last transaction was deleted")
 		return
 	}

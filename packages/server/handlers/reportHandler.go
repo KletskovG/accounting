@@ -50,6 +50,7 @@ func ReportHandler(response http.ResponseWriter, request *http.Request) {
 	response.WriteHeader(http.StatusOK)
 	response.Header().Add(common.HeaderContentType, common.ContentTypeJson)
 	io.WriteString(response, "OK, Wait for S3 link")
-	go services.UploadReport(report)
+
+	go services.UploadReport(report, common.Hosts().TelegramAPIURL)
 	return
 }

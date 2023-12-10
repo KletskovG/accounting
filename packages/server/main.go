@@ -2,11 +2,11 @@ package main
 
 import (
 	"net/http"
-	"net/url"
 
 	"github.com/kletskovg/accounting/packages/config"
 	"github.com/kletskovg/accounting/packages/logger"
 	"github.com/kletskovg/accounting/server/handlers"
+	"github.com/kletskovg/accounting/server/services"
 	"github.com/kletskovg/packages/common"
 )
 
@@ -22,8 +22,9 @@ func main() {
 
 	var port = ":8080"
 
-	logger.Info("Server starting on", port)
-	go http.Get(common.TelegramApiUrl + "/done/" + url.PathEscape("Budget server started"))
+	message := "Budget server starting on " + port
+	logger.Info(message)
+	go services.Notify(message)
 
 	mode := config.GetEnvVariable(config.ACC_MODE)
 

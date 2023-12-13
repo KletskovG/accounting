@@ -12,10 +12,10 @@ import (
 
 func main() {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", handlers.Ping)
-	mux.HandleFunc("/ping", handlers.Ping)
-	mux.HandleFunc("/list", handlers.ListHander)
-	mux.HandleFunc("/add", handlers.AddHandler)
+	mux.Handle("/", handlers.PingHandler{})
+	mux.Handle("/ping", handlers.PingHandler{})
+	mux.Handle("/list", handlers.ListHandler{})
+	mux.Handle("/add", handlers.AddHandler{})
 	mux.HandleFunc("/remove", handlers.RemoveHandler)
 	mux.HandleFunc("/update", handlers.UpdateHandler)
 	mux.HandleFunc("/report", handlers.ReportHandler)

@@ -1,12 +1,8 @@
-.DEFAULT_GOAL := docker
+lint:
+	bash ./tools/lint.sh
 
-start:
-	go run main.go
-	
-cli:
-	go build ./packages/cli/main.go
+test:
+	bash ./tools/test.sh || exit 1
 
-docker:
-	docker build . -t kletskovg/accounting:server -f deployment/Dockerfile.server
-docker_run:
-	docker run  -p "8080:8080" kletskovg/accounting:server
+db_testing:
+	sudo docker run -p 27017:27017 mongo:latest

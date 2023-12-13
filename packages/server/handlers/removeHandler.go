@@ -8,7 +8,6 @@ import (
 	"github.com/kletskovg/accounting/packages/db"
 	"github.com/kletskovg/accounting/packages/logger"
 	"github.com/kletskovg/packages/common"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func deleteTransactions(response http.ResponseWriter, request *http.Request, docsToDelete int) {
@@ -17,30 +16,20 @@ func deleteTransactions(response http.ResponseWriter, request *http.Request, doc
 	})
 	response.WriteHeader(http.StatusOK)
 	io.WriteString(response, "will delete "+strconv.Itoa(docsToDelete)+" transactions")
-	return
 }
 
 func deleteTransactionByID(response http.ResponseWriter, request *http.Request, id string) {
-	transactionID, idError := primitive.ObjectIDFromHex(id)
-
-	if idError != nil {
-		response.WriteHeader(http.StatusBadRequest)
-		io.WriteString(response, "Cant process transaction id "+idError.Error())
-		return
-	}
-
-	logger.Info("Transaction to be deleted", transactionID.Hex())
+	logger.Info("Transaction to be deleted", id)
 
 	go db.RemoveTransaction(db.RemoveTransactionArgs{
-		IDs: []string{transactionID.Hex()},
+		IDs: []string{id},
 	})
 
-	logger.Info(transactionID.Hex(), "deleted")
+	logger.Info(id, "deleted")
 
 	response.Header().Set(common.HeaderContentType, common.ContentTypeJson)
 	response.WriteHeader(http.StatusOK)
-	io.WriteString(response, "will delete transaction "+transactionID.Hex())
-	return
+	io.WriteString(response, "will delete transaction "+id)
 }
 
 func RemoveHandler(response http.ResponseWriter, request *http.Request) {

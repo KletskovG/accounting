@@ -28,7 +28,7 @@ func ReportArgsValidator(rootCmd *cobra.Command, args []string) error {
 	)
 
 	if start == "" || end == "" {
-		err := errors.New("Start end empty is required")
+		err := errors.New("start or end is empty and required")
 		logger.Info(err)
 		return err
 	}
@@ -67,8 +67,7 @@ func ReportCommand(rootCmd *cobra.Command, args []string) {
 	transcations := db.ReportTransactions(start, end)
 
 	report := common.GetCsvReport(transcations)
-	file, err := os.Create("report.csv") // TODO: Support output filepath
-
+	file, err := os.Create("report.csv")
 	if err != nil {
 		logger.Info("Cant write report to file", err)
 		return

@@ -1,0 +1,32 @@
+name: Checks
+on:
+  [push]
+jobs:
+  # DB:
+  #   name: Bootstrap MongoDB Server
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - run: sudo docker run -d -p 27017:27017 mongo:latest
+  Lint:
+    name: Run Staticcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+        with:
+          go-version: 1.21.4
+      - run: |
+          go install honnef.co/go/tools/cmd/staticcheck@latest
+          make lint
+  Test:
+    name: Run Go tests
+    # needs: [DB]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+        with:
+          go-version: 1.21.4
+      - run: |
+          sudo docker run -d -p 27017:27017 mongo:latest
+          make test

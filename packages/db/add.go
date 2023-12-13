@@ -6,7 +6,7 @@ import (
 
 	"github.com/kletskovg/accounting/packages/logger"
 	"github.com/kletskovg/packages/common"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func InsertTransaction(
@@ -14,7 +14,7 @@ func InsertTransaction(
 	expenseAmount int,
 	category,
 	note string,
-) (*mongo.InsertOneResult, error) {
+) (transactionID string, insertionError error) {
 	transaction := common.Transaction{
 		Date:      date,
 		Expense:   int32(expenseAmount),
@@ -25,5 +25,11 @@ func InsertTransaction(
 
 	logger.Info("inserting: ", transaction)
 
-	return Collection.InsertOne(context.Background(), transaction)
+	result, err := Collection.InsertOne(context.Background(), transaction)
+
+	if err != nil {
+		return "", err
+	}
+
+	return result.InsertedID.(primitive.ObjectID).String(), nil
 }

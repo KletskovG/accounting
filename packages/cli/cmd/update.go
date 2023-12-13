@@ -14,9 +14,6 @@ import (
 const (
 	updateMinArgs       = 2
 	transactionArgIndex = 0
-	// TODO: Think how to redeclare consts here and use in command impl
-	// amountArgIndex      = 1
-	// dateArgIndex        = 2
 )
 
 func UpdateArgsValidator(cmd *cobra.Command, args []string) error {

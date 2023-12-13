@@ -11,7 +11,9 @@ import (
 	"github.com/kletskovg/packages/common"
 )
 
-func ListHander(response http.ResponseWriter, request *http.Request) {
+type ListHandler struct{}
+
+func (lh ListHandler) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 	limitValue := request.URL.Query().Get("limit")
 
 	limit, err := strconv.Atoi(limitValue)
@@ -29,5 +31,6 @@ func ListHander(response http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		logger.Info("Cant cast transactions to JSON, ", err)
 	}
+	response.WriteHeader(http.StatusOK)
 	io.WriteString(response, string(result))
 }

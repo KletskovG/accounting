@@ -67,11 +67,11 @@ func AddCommand(cmd *cobra.Command, args []string) {
 
 	logger.Info("Inserting transaction with args: \n", addArgs)
 
-	var result, err = db.InsertTransaction(addArgs.date, addArgs.expenseAmount, addArgs.category, addArgs.note)
+	var transactionID, err = db.InsertTransaction(addArgs.date, addArgs.expenseAmount, addArgs.category, addArgs.note)
 
 	if err != nil {
 		logger.Error("Cant insert transaction \n", err)
 	}
 
-	logger.Info("Transaction added: \n", &result.InsertedID)
+	logger.Info("Transaction added: \n", transactionID)
 }

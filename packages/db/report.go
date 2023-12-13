@@ -3,7 +3,6 @@ package db
 import (
 	"context"
 	"sort"
-	"sync"
 	"time"
 
 	"github.com/kletskovg/accounting/packages/logger"
@@ -34,27 +33,20 @@ func ReportTransactions(start, end string) []common.Transaction {
 		return []common.Transaction{}
 	}
 
-	var wg sync.WaitGroup
 	var results []common.Transaction = make([]common.Transaction, 0)
 
 	for _, result := range transactions {
-		wg.Add(1)
-		go func(result common.Transaction) {
-			defer wg.Done()
-			transactionTimestamp, err := time.Parse(common.DateLayout, result.Date)
+		transactionTimestamp, err := time.Parse(common.DateLayout, result.Date)
 
-			if err != nil {
-				logger.Info("Cant parse date, ", result.Date, err)
-				return
-			}
+		if err != nil {
+			logger.Info("Cant parse date", result.Date, err)
+			continue
+		}
 
-			if transactionTimestamp.UTC().UnixMilli() >= startTimestamp && transactionTimestamp.UTC().UnixMilli() <= endTimestamp {
-				results = append(results, result)
-			}
-		}(result)
+		if transactionTimestamp.UTC().UnixMilli() >= startTimestamp && transactionTimestamp.UTC().UnixMilli() <= endTimestamp {
+			results = append(results, result)
+		}
 	}
-
-	wg.Wait()
 
 	sort.Slice(results, func(i, j int) bool {
 		leftTimestamp, startErr := time.Parse(common.DateLayout, results[i].Date)

@@ -11,18 +11,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-/**/
 type RemoveTransactionArgs struct {
 	RemoveLast bool
 	Count      int
 	IDs        []string
 }
 
-/*
-	RemoveTransaction transactions from DB, several options available:
-
-TODO
-*/
 func RemoveTransaction(args RemoveTransactionArgs) {
 	if args.RemoveLast {
 		logger.Info("Try to remove last transaction")

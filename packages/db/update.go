@@ -13,10 +13,6 @@ import (
 
 func UpdateTransaction(
 	id string,
-	// expenseAmount int,
-	// date,
-	// category,
-	// note string,
 	transaction *common.Transaction,
 ) *mongo.SingleResult {
 	transactionID, err := primitive.ObjectIDFromHex(id)

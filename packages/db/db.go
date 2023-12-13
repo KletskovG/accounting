@@ -12,7 +12,7 @@ import (
 var Collection = new(mongo.Collection)
 
 func init() {
-	var uri = config.GetEnvVariable(config.ACC_MONGODB_URL)
+	var uri = config.GetEnvVariable(config.ACC_DB_URL)
 
 	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(uri))
 
@@ -22,6 +22,6 @@ func init() {
 	}
 
 	Collection = client.Database(
-		config.GetEnvVariable(config.ACC_MONGODB_NAME),
-	).Collection(config.GetEnvVariable(config.ACC_MONGODB_COLLECTION))
+		config.GetEnvVariable(config.ACC_DB_NAME),
+	).Collection(config.GetEnvVariable(config.ACC_DB_COLLECTION))
 }

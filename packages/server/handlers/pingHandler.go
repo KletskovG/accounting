@@ -1,13 +1,14 @@
 package handlers
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 )
 
-func Ping(response http.ResponseWriter, request *http.Request) {
+type PingHandler struct{}
+
+func (ph PingHandler) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 	response.WriteHeader(http.StatusOK)
-	message := fmt.Sprint("Service health, %s DB is connected")
+	message := "Service healthy"
 	io.WriteString(response, message)
 }

@@ -2,6 +2,8 @@ package db
 
 import (
 	"context"
+	"sort"
+	"time"
 
 	"github.com/kletskovg/accounting/packages/logger"
 	"github.com/kletskovg/packages/common"
@@ -31,6 +33,19 @@ func ListTransations(limit int) []common.Transaction {
 	if err = cursor.All(context.Background(), &transactions); err != nil {
 		logger.Error("Cant process transactions from DB: \n", err)
 	}
+
+	// TODO: Remove duplicates from report.go
+	sort.Slice(transactions, func(i, j int) bool {
+		leftTimestamp, startErr := time.Parse(common.DateLayout, transactions[i].Date)
+		rightTimestamp, endErr := time.Parse(common.DateLayout, transactions[j].Date)
+
+		if startErr != nil || endErr != nil {
+			logger.Info("Report: cant parse dates to sort transactions, ", startErr, endErr)
+			return false
+		}
+
+		return leftTimestamp.UnixMilli() > rightTimestamp.UnixMilli()
+	})
 
 	return transactions
 }

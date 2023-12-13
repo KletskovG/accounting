@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/kletskovg/accounting/packages/db"
+	"github.com/kletskovg/accounting/packages/logger"
 	"github.com/kletskovg/packages/common"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func UpdateHandler(response http.ResponseWriter, request *http.Request) {
@@ -19,15 +19,9 @@ func UpdateHandler(response http.ResponseWriter, request *http.Request) {
 	}
 
 	transactionValue := request.URL.Query().Get("transaction")
-	transactionID, idError := primitive.ObjectIDFromHex(transactionValue)
-
-	if idError != nil {
-		response.WriteHeader(http.StatusBadRequest)
-		io.WriteString(response, "Cant process transaction id "+idError.Error())
-		return
-	}
 
 	amountValue := request.URL.Query().Get("amount")
+	logger.Info("Amount,", amountValue)
 	amount, err := strconv.Atoi(amountValue)
 
 	if err != nil {
@@ -40,7 +34,6 @@ func UpdateHandler(response http.ResponseWriter, request *http.Request) {
 	var dateValue string
 
 	if err != nil {
-		// TODO: Update default date value - right now it breaks logic, ovverrides current date
 		dateValue = ""
 	}
 
@@ -49,7 +42,7 @@ func UpdateHandler(response http.ResponseWriter, request *http.Request) {
 	category := request.URL.Query().Get("category")
 	note := request.URL.Query().Get("note")
 
-	updateResult := db.UpdateTransaction(transactionID.Hex(), &common.Transaction{
+	updateResult := db.UpdateTransaction(transactionValue, &common.Transaction{
 		Expense:  int32(amount),
 		Note:     note,
 		Date:     dateValue,
@@ -64,5 +57,5 @@ func UpdateHandler(response http.ResponseWriter, request *http.Request) {
 
 	response.WriteHeader(http.StatusOK)
 	response.Header().Add(common.HeaderContentType, common.ContentTypeJson)
-	io.WriteString(response, string(transactionID.Hex()))
+	io.WriteString(response, string(transactionValue))
 }

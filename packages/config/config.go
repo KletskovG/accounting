@@ -14,20 +14,20 @@ import (
 )
 
 const (
-	ACC_MONGODB_URL        = "ACC_MONGODB_URL"
-	ACC_MONGODB_NAME       = "ACC_MONGODB_NAME"
-	ACC_MONGODB_COLLECTION = "ACC_MONGODB_COLLECTION"
-	ACC_AWS_ACCESS         = "ACC_AWS_ACCESS"
-	ACC_AWS_SECRET         = "ACC_AWS_SECRET"
-	ACC_AWS_REGION         = "ACC_AWS_REGION"
-	ACC_AWS_BUCKET         = "ACC_AWS_BUCKET"
-	ACC_MODE               = "ACC_MODE"
+	ACC_DB_URL        = "ACC_DB_URL"
+	ACC_DB_NAME       = "ACC_DB_NAME"
+	ACC_DB_COLLECTION = "ACC_DB_COLLECTION"
+	ACC_AWS_ACCESS    = "ACC_AWS_ACCESS"
+	ACC_AWS_SECRET    = "ACC_AWS_SECRET"
+	ACC_AWS_REGION    = "ACC_AWS_REGION"
+	ACC_AWS_BUCKET    = "ACC_AWS_BUCKET"
+	ACC_MODE          = "ACC_MODE"
 )
 
 var requiredVars = []string{
-	ACC_MONGODB_COLLECTION,
-	ACC_MONGODB_NAME,
-	ACC_MONGODB_URL,
+	ACC_DB_COLLECTION,
+	ACC_DB_NAME,
+	ACC_DB_URL,
 }
 
 func init() {
@@ -44,14 +44,14 @@ func init() {
 }
 
 func GetEnvVariable(name string) string {
-	CheckUserConfig()
 	var value = viper.Get(name)
 
 	if value == nil {
 		value = os.Getenv(name)
 
 		if value == "" {
-			logger.Info("Cant read ", name, "env variable")
+			logger.Info("Cant read ", name, " env variable")
+			CheckUserConfig()
 		}
 	}
 
@@ -119,7 +119,7 @@ func ConfigureAwsCLI() error {
 	regionEnv := GetEnvVariable(ACC_AWS_REGION)
 
 	if keyIDEnv == "" || keySecretEnv == "" || regionEnv == "" {
-		return errors.New("Some of AWS ENV variables is missing")
+		return errors.New("some of aws env variables is missing")
 	}
 
 	configureKeyID := exec.Command("aws", "configure", "set", "aws_access_key_id", keyIDEnv)

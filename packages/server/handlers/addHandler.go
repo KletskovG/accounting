@@ -7,11 +7,13 @@ import (
 	"time"
 
 	"github.com/kletskovg/accounting/packages/db"
+	"github.com/kletskovg/accounting/packages/logger"
 	"github.com/kletskovg/packages/common"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func AddHandler(response http.ResponseWriter, request *http.Request) {
+type AddHandler struct{}
+
+func (ah AddHandler) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 	amountValue := request.URL.Query().Get("amount")
 	amount, err := strconv.Atoi(amountValue)
 
@@ -22,6 +24,8 @@ func AddHandler(response http.ResponseWriter, request *http.Request) {
 	}
 
 	dateValue := request.URL.Query().Get("date")
+	logger.Info("DATE", dateValue)
+	logger.Info(amount)
 	date, err := time.Parse(common.DateLayout, dateValue)
 
 	if err != nil {
@@ -33,22 +37,14 @@ func AddHandler(response http.ResponseWriter, request *http.Request) {
 	category := request.URL.Query().Get("category")
 	note := request.URL.Query().Get("note")
 
-	transaction, err := db.InsertTransaction(date.Format(common.DateLayout), amount, category, note)
+	transactionID, err := db.InsertTransaction(date.Format(common.DateLayout), amount, category, note)
 
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
-		io.WriteString(response, "Cant write transaction to DB")
-		return
+		io.WriteString(response, "Cant write transaction to DB"+err.Error())
 	}
 
-	transactionID, ok := transaction.InsertedID.(primitive.ObjectID)
-	if !ok {
-		response.WriteHeader(http.StatusInternalServerError)
-		io.WriteString(response, "Cant write transaction to DB")
-		return
-	}
-
-	response.Header().Set(common.HeaderContentType, common.ContentTypeJson)
 	response.WriteHeader(http.StatusCreated)
-	io.WriteString(response, transactionID.String())
+	response.Header().Set(common.HeaderContentType, common.ContentTypeJson)
+	io.WriteString(response, transactionID)
 }

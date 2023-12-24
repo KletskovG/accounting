@@ -83,8 +83,10 @@ func fillEmptyDays(startDate, endDate time.Time) string {
 
 func GetCsvReport(transactions []Transaction) string {
 	var csvReport = "Date,Amount,Category,Note\n"
+	transactionsReversed := slices.Clone(transactions)
+	slices.Reverse(transactionsReversed)
 
-	days := splitTransactionsByDays(transactions)
+	days := splitTransactionsByDays(transactionsReversed)
 
 	for index, day := range days {
 		days[index] = mergeTransactionsByCategory(day)
